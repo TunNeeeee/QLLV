@@ -1,0 +1,85 @@
+Attempted assignment: 2025-03-13 13:07:53
+POST data: Array
+(
+    [student_id] => 4
+    [faculty_id] => 1
+    [start_date] => 2025-03-13
+    [end_date] => 2025-05-13
+    [note] => 
+    [assign_student] => 
+)
+
+Query: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: Array
+(
+    [:studentId] => 4
+    [:facultyId] => 1
+    [:startDate] => 2025-03-13
+    [:endDate] => 2025-05-13
+    [:note] => 
+)
+
+Attempted assignment: 2025-03-13 13:07:58
+Attempted assignment: 2025-03-13 13:08:16
+POST data: Array
+(
+    [student_id] => 4
+    [faculty_id] => 1
+    [start_date] => 2025-03-13
+    [end_date] => 2025-05-13
+    [note] => 
+    [assign_student] => 
+)
+
+Query: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: Array
+(
+    [:studentId] => 4
+    [:facultyId] => 1
+    [:startDate] => 2025-03-13
+    [:endDate] => 2025-05-13
+    [:note] => 
+)
+
+Attempted assignment: 2025-03-13 13:10:12
+POST data: Array
+(
+    [student_id] => 5
+    [faculty_id] => 6
+    [start_date] => 2025-03-13
+    [note] => 
+    [assign_student] => 
+)
+
+Query: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: Array
+(
+    [:studentId] => 5
+    [:facultyId] => 6
+    [:startDate] => 2025-03-13
+    [:endDate] => 
+    [:note] => 
+)
+
+Attempted assignment: 2025-03-13 13:10:49
+POST data: Array
+(
+    [student_id] => 5
+    [faculty_id] => 6
+    [start_date] => 2025-03-13
+    [note] => 
+    [assign_student] => 
+)
+
+Query: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: Array
+(
+    [:studentId] => 5
+    [:facultyId] => 6
+    [:startDate] => 2025-03-13
+    [:endDate] => 
+    [:note] => 
+)
+
+Attempted assignment: 2025-03-13 13:10:52
+Attempted assignment: 2025-03-13 13:10:54

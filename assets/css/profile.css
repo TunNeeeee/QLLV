@@ -1,0 +1,245 @@
+.profile-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('../img/pattern.png');
+    opacity: 0.1;
+}
+
+.profile-avatar-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1.5rem;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-avatar-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-name {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.profile-role {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.profile-bio {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.profile-stat-item {
+    text-align: center;
+    margin: 0 1.5rem;
+}
+
+.profile-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: block;
+}
+
+.profile-stat-label {
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+.profile-tabs {
+    margin-bottom: 2rem;
+}
+
+.profile-tab-link {
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    position: relative;
+}
+
+.profile-tab-link.active {
+    color: var(--primary-color);
+}
+
+.profile-tab-link.active::after {
+    content: '';
+    position: absolute;
+    left: 1.5rem;
+    right: 1.5rem;
+    bottom: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px 3px 0 0;
+}
+
+.profile-section {
+    margin-bottom: 2rem;
+}
+
+.profile-section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+}
+
+.profile-section-title i {
+    margin-right: 0.75rem;
+    color: var(--primary-color);
+}
+
+.profile-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-info-item {
+    display: flex;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profile-info-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.profile-info-label {
+    width: 200px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.profile-info-value {
+    flex: 1;
+}
+
+.profile-info-input {
+    display: none;
+}
+
+.profile-info-input.active {
+    display: block;
+}
+
+.profile-social {
+    display: flex;
+    margin-top: 1rem;
+}
+
+.profile-social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    transition: all 0.2s;
+}
+
+.profile-social-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        padding: 2rem 1rem;
+    }
+    
+    .profile-avatar-wrapper {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .profile-name {
+        font-size: 1.5rem;
+    }
+    
+    .profile-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .profile-tab-link {
+        padding: 0.75rem 1rem;
+    }
+    
+    .profile-info-item {
+        flex-direction: column;
+    }
+    
+    .profile-info-label {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}

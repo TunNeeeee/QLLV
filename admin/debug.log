@@ -1,0 +1,92 @@
+SinhVienID: 4, GiangVienID: 1, NgayBatDau: 2025-03-13
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_3` FOREIGN KEY (`DeTaiID`) REFERENCES `detai` (`DeTaiID`) ON DELETE CASCADE)
+SinhVienID: 4, GiangVienID: 1, NgayBatDau: 2025-03-13
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_3` FOREIGN KEY (`DeTaiID`) REFERENCES `detai` (`DeTaiID`) ON DELETE CASCADE)
+
+
+--- NEW REQUEST: 2025-03-13 20:01:47 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 4, GiangVienID: 1, NgayBatDau: 2025-03-13
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=4, facultyId=1, startDate=2025-03-13, endDate=NULL
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_3` FOREIGN KEY (`DeTaiID`) REFERENCES `detai` (`DeTaiID`) ON DELETE CASCADE)
+
+
+--- NEW REQUEST: 2025-03-13 20:01:56 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 4, GiangVienID: 1, NgayBatDau: 2025-03-13
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=4, facultyId=1, startDate=2025-03-13, endDate=2025-05-13
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_3` FOREIGN KEY (`DeTaiID`) REFERENCES `detai` (`DeTaiID`) ON DELETE CASCADE)
+
+
+--- NEW REQUEST: 2025-03-13 20:04:33 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 4, GiangVienID: 1, NgayBatDau: 2025-03-13
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, DeTaiID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, NULL, :startDate, :endDate, :note)
+Params: studentId=4, facultyId=1, startDate=2025-03-13, endDate=2025-05-13
+Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'DeTaiID' cannot be null
+
+
+--- NEW REQUEST: 2025-03-13 20:04:41 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 4, GiangVienID: 1, NgayBatDau: 2025-03-13
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, DeTaiID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, NULL, :startDate, :endDate, :note)
+Params: studentId=4, facultyId=1, startDate=2025-03-13, endDate=2025-05-13
+Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'DeTaiID' cannot be null
+
+
+--- NEW REQUEST: 2025-03-13 20:09:22 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 4, GiangVienID: 1, NgayBatDau: 2025-03-13
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=4, facultyId=1, startDate=2025-03-13, endDate=2025-05-13
+Insert result: SUCCESS
+
+
+--- NEW REQUEST: 2025-03-13 20:11:30 ---
+Starting transaction
+
+
+--- NEW REQUEST: 2025-03-13 20:11:47 ---
+Starting transaction
+
+
+--- NEW REQUEST: 2025-03-13 20:14:45 ---
+Starting transaction
+
+
+--- NEW REQUEST: 2025-03-13 20:45:51 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 5, GiangVienID: 1, NgayBatDau: 2025-03-13
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=5, facultyId=1, startDate=2025-03-13, endDate=2025-05-13
+Insert result: SUCCESS
+
+
+--- NEW REQUEST: 2025-03-13 20:53:32 ---
+Starting transaction
+
+
+--- NEW REQUEST: 2025-03-13 21:01:29 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 6, GiangVienID: 1, NgayBatDau: 2025-03-13
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=6, facultyId=1, startDate=2025-03-13, endDate=2025-05-13
+Insert result: SUCCESS
+
+
+--- NEW REQUEST: 2025-03-14 07:41:55 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 7, GiangVienID: 1, NgayBatDau: 2025-03-14
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=7, facultyId=1, startDate=2025-03-14, endDate=2025-05-14
+Insert result: SUCCESS
