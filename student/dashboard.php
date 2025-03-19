@@ -676,6 +676,50 @@ if ($hasThesis && !empty($advisorData[0]['NgayKetThucDuKien'])) {
                 margin-left: 0;
             }
         }
+
+        /* Profile card info styling */
+        .profile-card-info {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .profile-card-info li {
+            display: flex;
+            align-items: center;
+            padding: 12px 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .profile-card-info li:last-child {
+            border-bottom: none;
+        }
+
+        .profile-info-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .profile-info-label {
+            min-width: 80px;
+            font-weight: 500;
+            color: var(--light-text);
+            margin-right: 8px;
+        }
+
+        .profile-info-value {
+            font-weight: 500;
+            color: var(--text-color);
+            flex-grow: 1;
+        }
     </style>
 </head>
 <body>
@@ -695,7 +739,7 @@ if ($hasThesis && !empty($advisorData[0]['NgayKetThucDuKien'])) {
             <div class="sidebar-user">
                 <div class="sidebar-user-img">
                     <?php if (!empty($student['Avatar'])): ?>
-                        <img src="<?php echo BASE_URL . 'uploads/avatars/' . $student['Avatar']; ?>" alt="Avatar">
+                        <img src="<?php echo BASE_URL . $student['Avatar']; ?>" alt="Avatar">
                     <?php else: ?>
                         <div class="avatar-placeholder">
                             <?php echo strtoupper(substr($student['HoTen'] ?? 'U', 0, 1)); ?>
@@ -819,7 +863,7 @@ if ($hasThesis && !empty($advisorData[0]['NgayKetThucDuKien'])) {
                         <div class="user-dropdown" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="user-avatar">
                                 <?php if (!empty($student['Avatar'])): ?>
-                                    <img src="<?php echo BASE_URL . 'uploads/avatars/' . $student['Avatar']; ?>" alt="Avatar">
+                                    <img src="<?php echo BASE_URL . $student['Avatar']; ?>" alt="Avatar">
                                 <?php else: ?>
                                     <div class="avatar-placeholder">
                                         <?php echo strtoupper(substr($student['HoTen'] ?? 'U', 0, 1)); ?>
@@ -956,7 +1000,7 @@ if ($hasThesis && !empty($advisorData[0]['NgayKetThucDuKien'])) {
                             <div class="card profile-card">
                                 <div class="profile-card-header">
                                     <?php if (!empty($student['Avatar'])): ?>
-                                        <img src="<?php echo BASE_URL . 'uploads/avatars/' . $student['Avatar']; ?>" alt="Avatar" class="profile-card-avatar">
+                                        <img src="<?php echo BASE_URL . $student['Avatar']; ?>" alt="Avatar" class="profile-card-avatar">
                                     <?php else: ?>
                                         <img src="<?php echo BASE_URL; ?>assets/img/default-avatar.jpg" alt="Avatar" class="profile-card-avatar">
                                     <?php endif; ?>
@@ -967,33 +1011,33 @@ if ($hasThesis && !empty($advisorData[0]['NgayKetThucDuKien'])) {
                                     <ul class="profile-card-info">
                                         <li>
                                             <i class="fas fa-id-card profile-info-icon"></i>
-                                            <span class="profile-info-label">MSSV</span>
+                                            <span class="profile-info-label">MSSV :</span>
                                             <span class="profile-info-value"><?php echo $student['MaSV']; ?></span>
                                         </li>
                                         <li>
                                             <i class="fas fa-envelope profile-info-icon"></i>
-                                            <span class="profile-info-label">Email</span>
+                                            <span class="profile-info-label">Email: </span>
                                             <span class="profile-info-value"><?php echo $student['Email']?></span>
                                         </li>
                                         <li>
                                             <i class="fas fa-university profile-info-icon"></i>
-                                            <span class="profile-info-label">Khoa</span>
-                                            <span class="profile-info-value"><?php echo $student['Khoa']; ?></span>
-                                        </li>
-                                        <li>
-                                            <i class="fas fa-graduation-cap profile-info-icon"></i>
-                                            <span class="profile-info-label">Ngành học</span>
+                                            <span class="profile-info-label">Khoa: </span>
                                             <span class="profile-info-value"><?php echo $student['NganhHoc']; ?></span>
                                         </li>
+                                        <!-- <li>
+                                            <i class="fas fa-graduation-cap profile-info-icon"></i>
+                                            <span class="profile-info-label">Ngành học: </span>
+                                            <span class="profile-info-value"><?php echo $student['NganhHoc']; ?></span>
+                                        </li> -->
                                         <li>
                                             <i class="fas fa-calendar-alt profile-info-icon"></i>
-                                            <span class="profile-info-label">Niên khóa</span>
+                                            <span class="profile-info-label">Niên khóa: </span>
                                             <span class="profile-info-value"><?php echo $student['NienKhoa']; ?></span>
                                         </li>
                                         <?php if (!empty($student['SoDienThoai'])): ?>
                                         <li>
                                             <i class="fas fa-phone profile-info-icon"></i>
-                                            <span class="profile-info-label">Điện thoại</span>
+                                            <span class="profile-info-label">Điện thoại: </span>
                                             <span class="profile-info-value"><?php echo $student['SoDienThoai']; ?></span>
                                         </li>
                                         <?php endif; ?>

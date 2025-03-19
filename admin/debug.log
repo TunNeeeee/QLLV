@@ -90,3 +90,142 @@ SinhVienID: 7, GiangVienID: 1, NgayBatDau: 2025-03-14
 Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
 Params: studentId=7, facultyId=1, startDate=2025-03-14, endDate=2025-05-14
 Insert result: SUCCESS
+
+
+--- NEW REQUEST: 2025-03-17 20:17:50 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 20:22:26 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 20:22:31 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 20:23:47 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 20:34:21 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 22:24:41 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 22:28:35 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_2` FOREIGN KEY (`id_giangvien`) REFERENCES `giangvien` (`GiangVienID`) ON DELETE CASCADE)
+
+
+--- NEW REQUEST: 2025-03-17 22:38:04 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_2` FOREIGN KEY (`id_giangvien`) REFERENCES `giangvien` (`GiangVienID`) ON DELETE CASCADE)
+
+
+--- NEW REQUEST: 2025-03-17 22:41:27 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_2` FOREIGN KEY (`id_giangvien`) REFERENCES `giangvien` (`GiangVienID`) ON DELETE CASCADE)
+
+
+--- NEW REQUEST: 2025-03-17 22:51:00 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-05-17
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_2` FOREIGN KEY (`id_giangvien`) REFERENCES `giangvien` (`GiangVienID`) ON DELETE CASCADE)
+
+
+--- NEW REQUEST: 2025-03-17 22:51:17 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-03-18
+Error: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`thesismanagementdb`.`sinhviengiangvienhuongdan`, CONSTRAINT `sinhviengiangvienhuongdan_ibfk_2` FOREIGN KEY (`id_giangvien`) REFERENCES `giangvien` (`GiangVienID`) ON DELETE CASCADE)
+
+
+--- NEW REQUEST: 2025-03-17 22:54:38 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-03-18
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 23:01:28 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-03-18
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 23:01:32 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 8, GiangVienID: 1, NgayBatDau: 2025-03-17
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=8, facultyId=1, startDate=2025-03-17, endDate=2025-03-18
+Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'GiangVienID' in 'field list'
+
+
+--- NEW REQUEST: 2025-03-17 23:02:27 ---
+Starting transaction
+
+
+--- NEW REQUEST: 2025-03-19 20:21:36 ---
+Starting transaction
+Checking/Creating table
+SinhVienID: 9, GiangVienID: 1, NgayBatDau: 2025-03-19
+Query to execute: INSERT INTO SinhVienGiangVienHuongDan (SinhVienID, GiangVienID, NgayBatDau, NgayKetThucDuKien, GhiChu) VALUES (:studentId, :facultyId, :startDate, :endDate, :note)
+Params: studentId=9, facultyId=1, startDate=2025-03-19, endDate=2025-05-19
+Insert result: SUCCESS

@@ -56,24 +56,16 @@ class Faculty {
      * Lấy danh sách sinh viên được phân công cho giảng viên
      */
     public function getAssignedStudents($facultyId) {
-        try {
-            // Bỏ cột TienDo ra khỏi truy vấn hoặc kiểm tra xem nó có tồn tại không
-            $this->db->query("SELECT sv.*, svgv.ID as PhanCongID, svgv.NgayBatDau, svgv.NgayKetThucDuKien, 
-                             svgv.DeTaiID, svgv.GhiChu,
-                             dt.TenDeTai, dt.TrangThai
-                             FROM SinhVienGiangVienHuongDan svgv
-                             JOIN SinhVien sv ON svgv.SinhVienID = sv.SinhVienID
-                             LEFT JOIN DeTai dt ON svgv.DeTaiID = dt.DeTaiID
-                             WHERE svgv.GiangVienID = :facultyId
-                             ORDER BY svgv.NgayBatDau DESC");
-            $this->db->bind(':facultyId', $facultyId);
-            $result = $this->db->resultSet();
-            
-            return $result;
-        } catch (PDOException $e) {
-            error_log("Error fetching assigned students: " . $e->getMessage());
-            return [];
-        }
+        $this->db->query("
+            SELECT sv.*, dt.TenDeTai, dt.TrangThai
+            FROM SinhVien sv
+            JOIN SinhVienGiangVienHuongDan svgv ON sv.SinhVienID = svgv.SinhVienID
+            LEFT JOIN DeTai dt ON svgv.DeTaiID = dt.DeTaiID
+            WHERE svgv.GiangVienID = :facultyId
+            ORDER BY sv.HoTen ASC
+        ");
+        $this->db->bind(':facultyId', $facultyId);
+        return $this->db->resultSet();
     }
     
     /**
@@ -99,16 +91,14 @@ class Faculty {
      * Đếm số lượng sinh viên được phân công cho giảng viên
      */
     public function countAssignedStudents($facultyId) {
-        try {
-            $this->db->query("SELECT COUNT(*) as total FROM SinhVienGiangVienHuongDan 
-                             WHERE GiangVienID = :facultyId");
-            $this->db->bind(':facultyId', $facultyId);
-            $result = $this->db->single();
-            return $result['total'];
-        } catch (PDOException $e) {
-            error_log("Error counting assigned students: " . $e->getMessage());
-            return 0;
-        }
+        $this->db->query("
+            SELECT COUNT(*) as total
+            FROM SinhVienGiangVienHuongDan svgv
+            WHERE svgv.GiangVienID = :facultyId
+        ");
+        $this->db->bind(':facultyId', $facultyId);
+        $result = $this->db->single();
+        return $result ? $result['total'] : 0;
     }
     
     /**
@@ -118,16 +108,44 @@ class Faculty {
      */
     public function getTheses($facultyId) {
         try {
-            $this->db->query("SELECT dt.*, COUNT(svgv.SinhVienID) as SoLuongSinhVien 
-                            FROM DeTai dt 
-                            JOIN SinhVienGiangVienHuongDan svgv ON dt.DeTaiID = svgv.DeTaiID 
-                            WHERE svgv.GiangVienID = :facultyId 
-                            GROUP BY dt.DeTaiID");
+            // Kiểm tra xem cột nào tồn tại trong bảng DeTai
+            $this->db->query("SHOW COLUMNS FROM DeTai LIKE 'GiangVienID'");
+            $hasGiangVienID = $this->db->rowCount() > 0;
+            
+            // Chỉ kiểm tra id_giangvien nếu GiangVienID không tồn tại
+            if (!$hasGiangVienID) {
+                $this->db->query("SHOW COLUMNS FROM DeTai LIKE 'id_giangvien'");
+                $hasIdGiangVien = $this->db->rowCount() > 0;
+                
+                // Cập nhật cấu trúc bảng nếu cần
+                if ($hasIdGiangVien) {
+                    // Đổi tên cột từ id_giangvien thành GiangVienID
+                    $this->db->query("ALTER TABLE `DeTai` CHANGE COLUMN `id_giangvien` `GiangVienID` INT NOT NULL");
+                    $this->db->execute();
+                    $hasGiangVienID = true;
+                }
+            }
+            
+            // Luôn dùng GiangVienID
+            $query = "
+                SELECT dt.*, COUNT(svgv.SinhVienID) as SoLuongSinhVien
+                FROM DeTai dt
+                LEFT JOIN SinhVienGiangVienHuongDan svgv ON dt.DeTaiID = svgv.DeTaiID
+                WHERE dt.GiangVienID = :facultyId
+                GROUP BY dt.DeTaiID
+                ORDER BY dt.NgayTao DESC
+            ";
+            
+            $this->db->query($query);
             $this->db->bind(':facultyId', $facultyId);
             
             return $this->db->resultSet();
         } catch (PDOException $e) {
-            error_log('Error fetching theses: ' . $e->getMessage());
+            $errorMessage = 'Error in getTheses: ' . $e->getMessage();
+            if (isset($query)) {
+                $errorMessage .= ' - Query: ' . $query;
+            }
+            error_log($errorMessage);
             return [];
         }
     }
@@ -234,7 +252,7 @@ class Faculty {
                     `NgayGap` datetime NOT NULL,
                     `DiaDiem` varchar(255) DEFAULT NULL,
                     `NoiDung` text DEFAULT NULL,
-                    `TrangThai` enum('Đã đặt','Đã chấp nhận','Đã hoàn thành','Đã hủy') DEFAULT 'Đã đặt',
+                    `TrangThai` enum('đã lên lịch', 'đã xác nhận', 'đã hoàn thành', 'đã hủy') DEFAULT 'đã lên lịch',
                     `GhiChu` text DEFAULT NULL,
                     `NgayTao` timestamp NOT NULL DEFAULT current_timestamp(),
                     PRIMARY KEY (`LichGapID`),
@@ -252,7 +270,7 @@ class Faculty {
             $this->db->bind(':ngayGap', $data['NgayGap']);
             $this->db->bind(':diaDiem', $data['DiaDiem'] ?? null);
             $this->db->bind(':noiDung', $data['NoiDung'] ?? null);
-            $this->db->bind(':trangThai', $data['TrangThai'] ?? 'Đã đặt');
+            $this->db->bind(':trangThai', $data['TrangThai'] ?? 'đã lên lịch');
             $this->db->bind(':ghiChu', $data['GhiChu'] ?? null);
             
             $this->db->execute();
@@ -344,5 +362,44 @@ class Faculty {
             return false;
         }
     }
+}
+
+// fix-column-names.php
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/database.php';
+
+$db = new Database();
+
+// Kiểm tra và cập nhật cột TrangThai trong bảng LichGap
+try {
+    $db->query("ALTER TABLE `LichGap` 
+                MODIFY COLUMN `TrangThai` ENUM('đã lên lịch', 'đã xác nhận', 'đã hoàn thành', 'đã hủy') 
+                DEFAULT 'đã lên lịch'");
+    $db->execute();
+    echo "Đã cập nhật cột TrangThai trong bảng LichGap.<br>";
+
+} catch (PDOException $e) {
+    echo "Lỗi: " . $e->getMessage();
+}
+
+// Cập nhật giá trị dữ liệu
+try {
+    // Cập nhật từ trạng thái viết hoa sang viết thường
+    $db->query("UPDATE `LichGap` SET `TrangThai` = 'đã lên lịch' WHERE `TrangThai` = 'Đã đặt' OR `TrangThai` IS NULL");
+    $db->execute();
+    
+    $db->query("UPDATE `LichGap` SET `TrangThai` = 'đã xác nhận' WHERE `TrangThai` = 'Đã chấp nhận'");
+    $db->execute();
+    
+    $db->query("UPDATE `LichGap` SET `TrangThai` = 'đã hoàn thành' WHERE `TrangThai` = 'Đã hoàn thành'");
+    $db->execute();
+    
+    $db->query("UPDATE `LichGap` SET `TrangThai` = 'đã hủy' WHERE `TrangThai` = 'Đã hủy'");
+    $db->execute();
+    
+    echo "Đã cập nhật giá trị TrangThai trong dữ liệu.<br>";
+    
+} catch (PDOException $e) {
+    echo "Lỗi khi cập nhật giá trị TrangThai: " . $e->getMessage();
 }
 ?>

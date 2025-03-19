@@ -1,4 +1,12 @@
 <?php
+// Bắt đầu output buffering ngay từ đầu
+ob_start();
+
+// Tắt hiển thị lỗi và thông báo
+error_reporting(0);
+ini_set('display_errors', 0);
+
+// Đảm bảo không có output nào trước khi include các file
 require_once '../config/config.php';
 require_once '../config/database.php';
 require_once '../classes/Auth.php';
@@ -59,30 +67,65 @@ try {
     $db->query("SHOW TABLES LIKE 'LichGap'");
     $tableExists = $db->rowCount() > 0;
     
-    if ($tableExists) {
-        $db->query("SELECT COUNT(*) as total FROM LichGap 
-                    WHERE GiangVienID = :facultyId AND NgayGap > CURDATE()");
-        $db->bind(':facultyId', $facultyId);
-        $result = $db->single();
-        if ($result) {
-            $upcomingMeetingsCount = $result['total'];
-        }
-        
-        // Lấy các cuộc gặp sắp tới
-        $db->query("SELECT lg.*, sv.HoTen as TenSinhVien, sv.MaSV
-                   FROM LichGap lg
-                   JOIN SinhVien sv ON lg.SinhVienID = sv.SinhVienID
-                   WHERE lg.GiangVienID = :facultyId AND lg.NgayGap > CURDATE()
-                   ORDER BY lg.NgayGap ASC
-                   LIMIT 5");
-        $db->bind(':facultyId', $facultyId);
-        $upcomingMeetings = $db->resultSet();
-    } else {
-        $upcomingMeetings = [];
+    if (!$tableExists) {
+        // Chỉ tạo bảng mới nếu chưa tồn tại
+        $db->query("CREATE TABLE `LichGap` (
+            `LichGapID` INT AUTO_INCREMENT PRIMARY KEY,
+            `SinhVienID` INT NOT NULL,
+            `GiangVienID` INT NOT NULL,
+            `TieuDe` VARCHAR(255) NOT NULL,
+            `NgayGap` DATETIME NOT NULL,
+            `DiaDiem` VARCHAR(255) NOT NULL,
+            `NoiDung` TEXT,
+            `TrangThai` ENUM('đã lên lịch', 'đã xác nhận', 'đã hủy', 'đã hoàn thành') DEFAULT 'đã lên lịch',
+            `GhiChu` TEXT,
+            `NgayTao` DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (`SinhVienID`) REFERENCES `SinhVien`(`SinhVienID`),
+            FOREIGN KEY (`GiangVienID`) REFERENCES `GiangVien`(`GiangVienID`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     }
+    
+    // Truy vấn tất cả lịch gặp của giảng viên trong tương lai
+    $db->query("SELECT lg.*, sv.HoTen as TenSinhVien, sv.MaSV  
+               FROM LichGap lg
+               LEFT JOIN SinhVien sv ON lg.SinhVienID = sv.SinhVienID
+               WHERE lg.GiangVienID = :facultyId
+               AND lg.NgayGap >= CURDATE()
+               ORDER BY lg.NgayGap ASC");
+    $db->bind(':facultyId', $facultyId);
+    $allMeetings = $db->resultSet();
+    
+    // Gom nhóm các lịch gặp có cùng ngày và giờ
+    $groupedMeetings = [];
+    foreach ($allMeetings as $meeting) {
+        $dateTime = $meeting['NgayGap'];
+        if (!isset($groupedMeetings[$dateTime])) {
+            $groupedMeetings[$dateTime] = [
+                'NgayGap' => $meeting['NgayGap'],
+                'TieuDe' => $meeting['TieuDe'],
+                'DiaDiem' => $meeting['DiaDiem'],
+                'students' => []
+            ];
+        }
+        if (!empty($meeting['TenSinhVien'])) {
+            $groupedMeetings[$dateTime]['students'][] = [
+                'TenSinhVien' => $meeting['TenSinhVien'],
+                'MaSV' => $meeting['MaSV']
+            ];
+        }
+    }
+    
+    // Chuyển về dạng mảng tuần tự và sắp xếp theo thời gian
+    $upcomingMeetings = array_values($groupedMeetings);
+    usort($upcomingMeetings, function($a, $b) {
+        return strtotime($a['NgayGap']) - strtotime($b['NgayGap']);
+    });
+    
+    // Cập nhật số lượng lịch gặp sắp tới
+    $upcomingMeetingsCount = count($upcomingMeetings);
 } catch (PDOException $e) {
-    // Nếu có lỗi, giữ $upcomingMeetingsCount = 0
     $upcomingMeetings = [];
+    $upcomingMeetingsCount = 0;
 }
 
 // Lấy thông báo mới nhất
@@ -665,42 +708,61 @@ try {
                 <div class="col-lg-4">
                     <!-- Lịch gặp sắp tới -->
                     <div class="card mb-4">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">
-                                <i class="fas fa-calendar-alt me-2 text-warning"></i>Lịch gặp sắp tới
-                            </h5>
-                            <a href="appointments.php" class="btn btn-sm btn-warning text-dark">Tất cả</a>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="fas fa-calendar-alt me-2 text-warning"></i>Lịch gặp sắp tới
+        </h5>
+        <a href="appointments.php" class="btn btn-sm btn-warning text-dark">Tất cả</a>
+    </div>
+    <!-- Phần hiển thị lịch gặp trong card -->
+<div class="card-body">
+    <?php if (!empty($upcomingMeetings)): ?>
+        <ul class="list-group list-group-flush">
+            <?php foreach ($upcomingMeetings as $meeting): ?>
+            <li class="list-group-item px-0">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="fw-bold">
+                            <?php echo !empty($meeting['TieuDe']) ? htmlspecialchars($meeting['TieuDe']) : 'Lịch gặp'; ?>
                         </div>
-                        <div class="card-body">
-                            <?php if (!empty($upcomingMeetings)): ?>
-                                <ul class="list-group list-group-flush">
-                                    <?php foreach ($upcomingMeetings as $meeting): ?>
-                                    <li class="list-group-item px-0">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <div class="fw-bold"><?php echo htmlspecialchars($meeting['TenSinhVien']); ?></div>
-                                                <div class="small text-muted"><?php echo htmlspecialchars($meeting['MaSV']); ?></div>
-                                            </div>
-                                            <div class="text-end">
-                                                <div class="small fw-bold">
-                                                    <?php echo date('d/m/Y', strtotime($meeting['NgayGap'])); ?>
-                                                </div>
-                                                <div class="small text-muted">
-                                                    <?php echo date('H:i', strtotime($meeting['GioBatDau'])); ?> - <?php echo date('H:i', strtotime($meeting['GioKetThuc'])); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            <?php else: ?>
-                                <div class="text-center py-3">
-                                    <i class="fas fa-calendar-day text-muted mb-2" style="font-size: 2rem;"></i>
-                                    <p class="mb-0">Không có lịch gặp sắp tới</p>
-                                </div>
-                            <?php endif; ?>
+                        <?php if (!empty($meeting['students'])): ?>
+                            <div class="small text-muted">
+                                <i class="fas fa-users me-1"></i>
+                                <?php 
+                                $studentNames = array_map(function($student) {
+                                    return htmlspecialchars($student['TenSinhVien']);
+                                }, $meeting['students']);
+                                echo implode(', ', $studentNames);
+                                ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="text-end">
+                        <div class="small fw-bold">
+                            <?php echo date('d/m/Y', strtotime($meeting['NgayGap'])); ?>
+                        </div>
+                        <div class="small text-muted">
+                            <?php echo date('H:i', strtotime($meeting['NgayGap'])); ?> | 
+                            <?php echo htmlspecialchars($meeting['DiaDiem']); ?>
                         </div>
                     </div>
+                </div>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <div class="text-center py-3">
+            <i class="fas fa-calendar-day text-muted mb-2" style="font-size: 2rem;"></i>
+            <p class="mb-0">Không có lịch gặp sắp tới</p>
+            <a href="schedule-meeting.php" class="btn btn-sm btn-primary mt-2">
+                <i class="fas fa-plus me-1"></i> Tạo lịch gặp mới
+            </a>
+        </div>
+    <?php endif; ?>
+</div>
+
+</div>
+
                     
                     <!-- Thông báo gần đây -->
                     <div class="card">
@@ -764,3 +826,12 @@ try {
     </script>
 </body>
 </html>
+<?php
+$output = ob_get_clean();
+
+// Xóa các thông báo debug và <br> tags
+$output = preg_replace('/^(?:<br>)*/', '', $output);
+$output = preg_replace('/Đã cập nhật .*?trong (?:bảng|dữ liệu).*?\.<br>/', '', $output);
+
+echo $output;
+?>

@@ -466,6 +466,19 @@ try {
         .footer-links a:hover {
             color: var(--primary-color);
         }
+
+        .sidebar-user-img img, .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-avatar img {
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -481,7 +494,11 @@ try {
             
             <div class="sidebar-user">
                 <div class="sidebar-user-img">
-                    <?php echo strtoupper(substr($student['HoTen'] ?? 'U', 0, 1)); ?>
+                    <?php if (!empty($student['Avatar'])): ?>
+                        <img src="<?php echo BASE_URL . $student['Avatar']; ?>" alt="Avatar" class="rounded-circle w-100 h-100" style="object-fit: cover;">
+                    <?php else: ?>
+                        <?php echo strtoupper(substr($student['HoTen'] ?? 'U', 0, 1)); ?>
+                    <?php endif; ?>
                 </div>
                 <div class="sidebar-user-info">
                     <span class="sidebar-user-name"><?php echo htmlspecialchars($student['HoTen']); ?></span>
@@ -524,7 +541,11 @@ try {
                             <div class="card-body p-0">
                                 <div class="profile-header">
                                     <div class="profile-avatar">
-                                        <?php echo strtoupper(substr($student['HoTen'] ?? 'U', 0, 1)); ?>
+                                        <?php if (!empty($student['Avatar'])): ?>
+                                            <img src="<?php echo BASE_URL . $student['Avatar']; ?>" alt="Avatar" class="rounded-circle w-100 h-100" style="object-fit: cover;">
+                                        <?php else: ?>
+                                            <?php echo strtoupper(substr($student['HoTen'] ?? 'U', 0, 1)); ?>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="profile-info">
                                         <h3><?php echo htmlspecialchars($student['HoTen']); ?></h3>

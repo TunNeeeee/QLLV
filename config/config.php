@@ -8,7 +8,7 @@ define('DB_PASS', '');
 define('DB_NAME', 'thesisManagementDB');
 
 // Site settings
-define('SITE_NAME', 'Thesis Advisor Management System');
+define('SITE_NAME', 'HUTECH - LUẬN VĂN SINH VIÊN');
 define('BASE_URL', 'http://localhost/thesis-management-system/');
 define('UPLOAD_DIR', 'uploads/');
 define('SESSION_TIME', 3600); // Session time in seconds
