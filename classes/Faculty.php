@@ -7,7 +7,7 @@ class Faculty {
     }
 
     public function createFaculty($data) {
-        $this->db->query("INSERT INTO GiangVien (MaGV, HoTen, HocVi, ChucVu, Khoa, ChuyenNganh, Email, SoDienThoai) VALUES (:maGV, :hoTen, :hocVi, :chucVu, :khoa, :chuyenNganh, :email, :soDienThoai)");
+        $this->db->query("INSERT INTO giangvien (MaGV, HoTen, HocVi, ChucVu, Khoa, ChuyenNganh, Email, SoDienThoai, LinhVucHuongDan, SoLuongSinhVienToiDa) VALUES (:maGV, :hoTen, :hocVi, :chucVu, :khoa, :chuyenNganh, :email, :soDienThoai, :linhVucHuongDan, :soLuongSinhVienToiDa)");
         $this->db->bind(':maGV', $data['maGV']);
         $this->db->bind(':hoTen', $data['hoTen']);
         $this->db->bind(':hocVi', $data['hocVi']);
@@ -16,18 +16,20 @@ class Faculty {
         $this->db->bind(':chuyenNganh', $data['chuyenNganh']);
         $this->db->bind(':email', $data['email']);
         $this->db->bind(':soDienThoai', $data['soDienThoai']);
+        $this->db->bind(':linhVucHuongDan', $data['linhVucHuongDan']);
+        $this->db->bind(':soLuongSinhVienToiDa', $data['soLuongSinhVienToiDa']);
         
         return $this->db->execute();
     }
 
     public function getFaculty($id) {
-        $this->db->query("SELECT * FROM GiangVien WHERE GiangVienID = :id");
+        $this->db->query("SELECT * FROM giangvien WHERE GiangVienID = :id");
         $this->db->bind(':id', $id);
         return $this->db->single();
     }
 
     public function updateFaculty($id, $data) {
-        $this->db->query("UPDATE GiangVien SET MaGV = :maGV, HoTen = :hoTen, HocVi = :hocVi, ChucVu = :chucVu, Khoa = :khoa, ChuyenNganh = :chuyenNganh, Email = :email, SoDienThoai = :soDienThoai WHERE GiangVienID = :id");
+        $this->db->query("UPDATE giangvien SET MaGV = :maGV, HoTen = :hoTen, HocVi = :hocVi, ChucVu = :chucVu, Khoa = :khoa, ChuyenNganh = :chuyenNganh, Email = :email, SoDienThoai = :soDienThoai, LinhVucHuongDan = :linhVucHuongDan, SoLuongSinhVienToiDa = :soLuongSinhVienToiDa WHERE GiangVienID = :id");
         $this->db->bind(':maGV', $data['maGV']);
         $this->db->bind(':hoTen', $data['hoTen']);
         $this->db->bind(':hocVi', $data['hocVi']);
@@ -36,19 +38,21 @@ class Faculty {
         $this->db->bind(':chuyenNganh', $data['chuyenNganh']);
         $this->db->bind(':email', $data['email']);
         $this->db->bind(':soDienThoai', $data['soDienThoai']);
+        $this->db->bind(':linhVucHuongDan', $data['linhVucHuongDan']);
+        $this->db->bind(':soLuongSinhVienToiDa', $data['soLuongSinhVienToiDa']);
         $this->db->bind(':id', $id);
         
         return $this->db->execute();
     }
 
     public function deleteFaculty($id) {
-        $this->db->query("DELETE FROM GiangVien WHERE GiangVienID = :id");
+        $this->db->query("DELETE FROM giangvien WHERE GiangVienID = :id");
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
 
     public function getAllFaculty() {
-        $this->db->query("SELECT * FROM GiangVien");
+        $this->db->query("SELECT * FROM giangvien");
         return $this->db->resultSet();
     }
 
@@ -57,10 +61,10 @@ class Faculty {
      */
     public function getAssignedStudents($facultyId) {
         $this->db->query("
-            SELECT sv.*, dt.TenDeTai, dt.TrangThai
-            FROM SinhVien sv
-            JOIN SinhVienGiangVienHuongDan svgv ON sv.SinhVienID = svgv.SinhVienID
-            LEFT JOIN DeTai dt ON svgv.DeTaiID = dt.DeTaiID
+            SELECT sv.*, dt.TenDeTai, dt.TrangThai, svgv.TrangThaiHuongDan, svgv.TienDo
+            FROM sinhvien sv
+            JOIN sinhviengiangvienhuongdan svgv ON sv.SinhVienID = svgv.SinhVienID
+            LEFT JOIN detai dt ON svgv.DeTaiID = dt.DeTaiID
             WHERE svgv.GiangVienID = :facultyId
             ORDER BY sv.HoTen ASC
         ");
@@ -75,8 +79,8 @@ class Faculty {
      */
     public function getFacultyDetails($facultyId) {
         try {
-            $this->db->query("SELECT gv.*, u.Email, u.Username FROM GiangVien gv 
-                            JOIN Users u ON gv.UserID = u.UserID 
+            $this->db->query("SELECT gv.*, u.Email, u.Username FROM giangvien gv 
+                            JOIN users u ON gv.UserID = u.UserID 
                             WHERE gv.GiangVienID = :facultyId");
             $this->db->bind(':facultyId', $facultyId);
             
@@ -93,7 +97,7 @@ class Faculty {
     public function countAssignedStudents($facultyId) {
         $this->db->query("
             SELECT COUNT(*) as total
-            FROM SinhVienGiangVienHuongDan svgv
+            FROM sinhviengiangvienhuongdan svgv
             WHERE svgv.GiangVienID = :facultyId
         ");
         $this->db->bind(':facultyId', $facultyId);
@@ -108,29 +112,10 @@ class Faculty {
      */
     public function getTheses($facultyId) {
         try {
-            // Kiểm tra xem cột nào tồn tại trong bảng DeTai
-            $this->db->query("SHOW COLUMNS FROM DeTai LIKE 'GiangVienID'");
-            $hasGiangVienID = $this->db->rowCount() > 0;
-            
-            // Chỉ kiểm tra id_giangvien nếu GiangVienID không tồn tại
-            if (!$hasGiangVienID) {
-                $this->db->query("SHOW COLUMNS FROM DeTai LIKE 'id_giangvien'");
-                $hasIdGiangVien = $this->db->rowCount() > 0;
-                
-                // Cập nhật cấu trúc bảng nếu cần
-                if ($hasIdGiangVien) {
-                    // Đổi tên cột từ id_giangvien thành GiangVienID
-                    $this->db->query("ALTER TABLE `DeTai` CHANGE COLUMN `id_giangvien` `GiangVienID` INT NOT NULL");
-                    $this->db->execute();
-                    $hasGiangVienID = true;
-                }
-            }
-            
-            // Luôn dùng GiangVienID
             $query = "
                 SELECT dt.*, COUNT(svgv.SinhVienID) as SoLuongSinhVien
-                FROM DeTai dt
-                LEFT JOIN SinhVienGiangVienHuongDan svgv ON dt.DeTaiID = svgv.DeTaiID
+                FROM detai dt
+                LEFT JOIN sinhviengiangvienhuongdan svgv ON dt.DeTaiID = svgv.DeTaiID
                 WHERE dt.GiangVienID = :facultyId
                 GROUP BY dt.DeTaiID
                 ORDER BY dt.NgayTao DESC
@@ -141,11 +126,7 @@ class Faculty {
             
             return $this->db->resultSet();
         } catch (PDOException $e) {
-            $errorMessage = 'Error in getTheses: ' . $e->getMessage();
-            if (isset($query)) {
-                $errorMessage .= ' - Query: ' . $query;
-            }
-            error_log($errorMessage);
+            error_log('Error in getTheses: ' . $e->getMessage());
             return [];
         }
     }
@@ -158,12 +139,14 @@ class Faculty {
      */
     public function updateProfile($facultyId, $data) {
         try {
-            $this->db->query("UPDATE GiangVien 
+            $this->db->query("UPDATE giangvien 
                             SET HoTen = :hoTen, 
                                 HocVi = :hocVi,
                                 ChuyenNganh = :chuyenNganh,
                                 SoDienThoai = :soDienThoai,
-                                DiaChi = :diaChi
+                                DiaChi = :diaChi,
+                                LinhVucHuongDan = :linhVucHuongDan,
+                                SoLuongSinhVienToiDa = :soLuongSinhVienToiDa
                             WHERE GiangVienID = :facultyId");
             
             $this->db->bind(':hoTen', $data['HoTen']);
@@ -171,6 +154,8 @@ class Faculty {
             $this->db->bind(':chuyenNganh', $data['ChuyenNganh']);
             $this->db->bind(':soDienThoai', $data['SoDienThoai'] ?? null);
             $this->db->bind(':diaChi', $data['DiaChi'] ?? null);
+            $this->db->bind(':linhVucHuongDan', $data['LinhVucHuongDan'] ?? null);
+            $this->db->bind(':soLuongSinhVienToiDa', $data['SoLuongSinhVienToiDa'] ?? null);
             $this->db->bind(':facultyId', $facultyId);
             
             return $this->db->execute();
@@ -189,12 +174,13 @@ class Faculty {
         try {
             $this->db->beginTransaction();
             
-            $this->db->query("INSERT INTO DeTai (TenDeTai, MoTa, TrangThai, NgayTao) 
-                            VALUES (:tenDeTai, :moTa, :trangThai, NOW())");
+            $this->db->query("INSERT INTO detai (TenDeTai, MoTa, TrangThai, NgayTao, GiangVienID) 
+                            VALUES (:tenDeTai, :moTa, :trangThai, NOW(), :giangVienID)");
             
             $this->db->bind(':tenDeTai', $data['TenDeTai']);
             $this->db->bind(':moTa', $data['MoTa']);
             $this->db->bind(':trangThai', $data['TrangThai'] ?? 'Chờ phê duyệt');
+            $this->db->bind(':giangVienID', $data['GiangVienID']);
             
             $this->db->execute();
             $thesisId = $this->db->lastInsertId();
@@ -217,7 +203,7 @@ class Faculty {
      */
     public function updateThesisProgress($thesisId, $studentId, $progress) {
         try {
-            $this->db->query("UPDATE SinhVienGiangVienHuongDan
+            $this->db->query("UPDATE sinhviengiangvienhuongdan
                             SET TienDo = :tienDo
                             WHERE DeTaiID = :detaiId AND SinhVienID = :sinhvienId");
             
@@ -239,42 +225,18 @@ class Faculty {
      */
     public function scheduleAppointment($data) {
         try {
-            // Kiểm tra xem bảng LichGap có tồn tại không
-            $this->db->query("SHOW TABLES LIKE 'LichGap'");
-            $tableExists = $this->db->rowCount() > 0;
+            $this->db->query("INSERT INTO lichgap (SinhVienID, GiangVienID, TieuDe, NoiDung, DiaDiem, NgayGap, TrangThai) 
+                            VALUES (:sinhVienID, :giangVienID, :tieuDe, :noiDung, :diaDiem, :ngayGap, :trangThai)");
             
-            if (!$tableExists) {
-                // Tạo bảng LichGap nếu chưa tồn tại
-                $this->db->query("CREATE TABLE IF NOT EXISTS `LichGap` (
-                    `LichGapID` int(11) NOT NULL AUTO_INCREMENT,
-                    `SinhVienID` int(11) NOT NULL,
-                    `GiangVienID` int(11) NOT NULL,
-                    `NgayGap` datetime NOT NULL,
-                    `DiaDiem` varchar(255) DEFAULT NULL,
-                    `NoiDung` text DEFAULT NULL,
-                    `TrangThai` enum('đã lên lịch', 'đã xác nhận', 'đã hoàn thành', 'đã hủy') DEFAULT 'đã lên lịch',
-                    `GhiChu` text DEFAULT NULL,
-                    `NgayTao` timestamp NOT NULL DEFAULT current_timestamp(),
-                    PRIMARY KEY (`LichGapID`),
-                    KEY `SinhVienID` (`SinhVienID`),
-                    KEY `GiangVienID` (`GiangVienID`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-                $this->db->execute();
-            }
-            
-            $this->db->query("INSERT INTO LichGap (SinhVienID, GiangVienID, NgayGap, DiaDiem, NoiDung, TrangThai, GhiChu) 
-                            VALUES (:sinhVienId, :giangVienId, :ngayGap, :diaDiem, :noiDung, :trangThai, :ghiChu)");
-            
-            $this->db->bind(':sinhVienId', $data['SinhVienID']);
-            $this->db->bind(':giangVienId', $data['GiangVienID']);
+            $this->db->bind(':sinhVienID', $data['SinhVienID']);
+            $this->db->bind(':giangVienID', $data['GiangVienID']);
+            $this->db->bind(':tieuDe', $data['TieuDe']);
+            $this->db->bind(':noiDung', $data['NoiDung']);
+            $this->db->bind(':diaDiem', $data['DiaDiem']);
             $this->db->bind(':ngayGap', $data['NgayGap']);
-            $this->db->bind(':diaDiem', $data['DiaDiem'] ?? null);
-            $this->db->bind(':noiDung', $data['NoiDung'] ?? null);
-            $this->db->bind(':trangThai', $data['TrangThai'] ?? 'đã lên lịch');
-            $this->db->bind(':ghiChu', $data['GhiChu'] ?? null);
+            $this->db->bind(':trangThai', $data['TrangThai'] ?? 'Chờ xác nhận');
             
-            $this->db->execute();
-            return $this->db->lastInsertId();
+            return $this->db->execute();
         } catch (PDOException $e) {
             error_log('Error scheduling appointment: ' . $e->getMessage());
             return false;
@@ -284,81 +246,90 @@ class Faculty {
     /**
      * Lấy danh sách lịch gặp của giảng viên
      * @param int $facultyId ID giảng viên
-     * @param string $filter Bộ lọc (upcoming, past, all)
      * @return array Danh sách lịch gặp
      */
-    public function getAppointments($facultyId, $filter = 'all') {
+    public function getAppointments($facultyId) {
         try {
-            // Kiểm tra xem bảng LichGap có tồn tại không
-            $this->db->query("SHOW TABLES LIKE 'LichGap'");
-            $tableExists = $this->db->rowCount() > 0;
-            
-            if (!$tableExists) {
-                return [];
-            }
-            
-            $where = "WHERE lg.GiangVienID = :facultyId";
-            
-            if ($filter === 'upcoming') {
-                $where .= " AND lg.NgayGap > NOW()";
-            } elseif ($filter === 'past') {
-                $where .= " AND lg.NgayGap < NOW()";
-            }
-            
-            $this->db->query("SELECT lg.*, sv.HoTen as TenSinhVien, sv.MaSV
-                           FROM LichGap lg
-                           JOIN SinhVien sv ON lg.SinhVienID = sv.SinhVienID
-                           $where
-                           ORDER BY lg.NgayGap ASC");
-            
+            $this->db->query("
+                SELECT lg.*, sv.HoTen as SinhVienTen
+                FROM lichgap lg
+                JOIN sinhvien sv ON lg.SinhVienID = sv.SinhVienID
+                WHERE lg.GiangVienID = :facultyId
+                ORDER BY lg.NgayGap DESC
+            ");
             $this->db->bind(':facultyId', $facultyId);
-            
             return $this->db->resultSet();
         } catch (PDOException $e) {
-            error_log('Error fetching appointments: ' . $e->getMessage());
+            error_log('Error getting appointments: ' . $e->getMessage());
             return [];
         }
     }
-    
-    /**
-     * Gửi thông báo
-     * @param array $data Dữ liệu thông báo
-     * @return int|bool ID của thông báo mới hoặc false nếu có lỗi
-     */
-    public function sendNotification($data) {
+
+    public function getUpcomingAppointments($facultyId) {
         try {
-            // Kiểm tra xem bảng ThongBao có tồn tại không
-            $this->db->query("SHOW TABLES LIKE 'ThongBao'");
-            $tableExists = $this->db->rowCount() > 0;
-            
-            if (!$tableExists) {
-                // Tạo bảng ThongBao nếu chưa tồn tại
-                $this->db->query("CREATE TABLE IF NOT EXISTS `ThongBao` (
-                    `ThongBaoID` int(11) NOT NULL AUTO_INCREMENT,
-                    `UserID` int(11) NOT NULL,
-                    `TieuDe` varchar(255) NOT NULL,
-                    `NoiDung` text NOT NULL,
-                    `LoaiThongBao` varchar(50) DEFAULT NULL,
-                    `DaDoc` tinyint(1) NOT NULL DEFAULT 0,
-                    `NgayTao` timestamp NOT NULL DEFAULT current_timestamp(),
-                    PRIMARY KEY (`ThongBaoID`),
-                    KEY `UserID` (`UserID`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-                $this->db->execute();
-            }
-            
-            $this->db->query("INSERT INTO ThongBao (UserID, TieuDe, NoiDung, LoaiThongBao) 
-                            VALUES (:userId, :tieuDe, :noiDung, :loaiThongBao)");
-            
-            $this->db->bind(':userId', $data['UserID']);
-            $this->db->bind(':tieuDe', $data['TieuDe']);
-            $this->db->bind(':noiDung', $data['NoiDung']);
-            $this->db->bind(':loaiThongBao', $data['LoaiThongBao'] ?? null);
-            
-            $this->db->execute();
-            return $this->db->lastInsertId();
+            $this->db->query("
+                SELECT lg.*, sv.HoTen as SinhVienTen
+                FROM lichgap lg
+                JOIN sinhvien sv ON lg.SinhVienID = sv.SinhVienID
+                WHERE lg.GiangVienID = :facultyId
+                AND lg.NgayGap >= NOW()
+                AND lg.TrangThai = 'Đã xác nhận'
+                ORDER BY lg.NgayGap ASC
+            ");
+            $this->db->bind(':facultyId', $facultyId);
+            return $this->db->resultSet();
         } catch (PDOException $e) {
-            error_log('Error sending notification: ' . $e->getMessage());
+            error_log('Error getting upcoming appointments: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getPastAppointments($facultyId) {
+        try {
+            $this->db->query("
+                SELECT lg.*, sv.HoTen as SinhVienTen
+                FROM lichgap lg
+                JOIN sinhvien sv ON lg.SinhVienID = sv.SinhVienID
+                WHERE lg.GiangVienID = :facultyId
+                AND lg.NgayGap < NOW()
+                ORDER BY lg.NgayGap DESC
+            ");
+            $this->db->bind(':facultyId', $facultyId);
+            return $this->db->resultSet();
+        } catch (PDOException $e) {
+            error_log('Error getting past appointments: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function updateAppointmentStatus($appointmentId, $status) {
+        try {
+            $this->db->query("
+                UPDATE lichgap 
+                SET TrangThai = :trangThai
+                WHERE LichGapID = :lichGapID
+            ");
+            $this->db->bind(':trangThai', $status);
+            $this->db->bind(':lichGapID', $appointmentId);
+            return $this->db->execute();
+        } catch (PDOException $e) {
+            error_log('Error updating appointment status: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getAppointmentDetails($appointmentId) {
+        try {
+            $this->db->query("
+                SELECT lg.*, sv.HoTen as SinhVienTen, sv.MaSV
+                FROM lichgap lg
+                JOIN sinhvien sv ON lg.SinhVienID = sv.SinhVienID
+                WHERE lg.LichGapID = :lichGapID
+            ");
+            $this->db->bind(':lichGapID', $appointmentId);
+            return $this->db->single();
+        } catch (PDOException $e) {
+            error_log('Error getting appointment details: ' . $e->getMessage());
             return false;
         }
     }

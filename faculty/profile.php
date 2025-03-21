@@ -6,8 +6,9 @@ require_once '../classes/Faculty.php';
 
 session_start();
 
+$db = new Database();
 $auth = new Auth();
-$faculty = new Faculty();
+$faculty = new Faculty($db);
 
 if (!$auth->isLoggedIn() || !$auth->hasRole('faculty')) {
     header('Location: ../auth/login.php');
@@ -15,7 +16,7 @@ if (!$auth->isLoggedIn() || !$auth->hasRole('faculty')) {
 }
 
 $facultyId = $_SESSION['profile_id'];
-$facultyData = $faculty->getFacultyById($facultyId);
+$facultyData = $faculty->getFaculty($facultyId);
 ?>
 
 <!DOCTYPE html>
@@ -26,10 +27,11 @@ $facultyData = $faculty->getFacultyById($facultyId);
     <title>Hồ sơ Giảng viên - <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="../assets/css/bootstrap.custom.css">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/profile.css">
 </head>
 <body>
     <?php include '../includes/header.php'; ?>
-    <?php include '../includes/faculty-menu.php'; ?>
+    <?php include '../includes/faculty-navbar.php'; ?>
 
     <div class="container mt-4">
         <h2 class="mb-4">Thông tin Giảng viên</h2>

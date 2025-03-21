@@ -24400,3 +24400,153 @@ Query executed: SELECT * FROM ThongBao WHERE UserID = :userId AND TrangThai = 'c
 Result: SUCCESS
 Query executed: SELECT COUNT(*) as count FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc'
 Result: SUCCESS
+Query executed: SELECT * FROM Users WHERE Username = :username AND Status = 'active'
+Result: SUCCESS
+Query executed: SELECT SinhVienID FROM SinhVien WHERE UserID = :userId
+Result: SUCCESS
+Query executed: SELECT sv.*, u.Username, u.Email FROM SinhVien sv 
+            JOIN Users u ON sv.UserID = u.UserID 
+            WHERE sv.SinhVienID = :id
+Result: SUCCESS
+Query executed: SELECT 
+    svgv.*, 
+    gv.HoTen AS TenGiangVien,
+    gv.HocVi,
+    gv.Email AS EmailGiangVien,
+    dt.DeTaiID, 
+    dt.TenDeTai,
+    dt.MoTa,
+    dt.TrangThai AS TrangThaiDeTai
+FROM SinhVienGiangVienHuongDan svgv
+LEFT JOIN DeTai dt ON svgv.DeTaiID = dt.DeTaiID
+LEFT JOIN GiangVien gv ON svgv.GiangVienID = gv.GiangVienID
+WHERE svgv.SinhVienID = :studentId
+Result: SUCCESS
+Query executed: SELECT * FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc' ORDER BY NgayTao DESC LIMIT 5
+Result: SUCCESS
+Query executed: SELECT COUNT(*) as count FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc'
+Result: SUCCESS
+Query executed: SELECT sv.*, u.Username, u.Email FROM SinhVien sv 
+            JOIN Users u ON sv.UserID = u.UserID 
+            WHERE sv.SinhVienID = :id
+Result: SUCCESS
+Query executed: SELECT lg.*, gv.HoTen AS TenGiangVien, gv.HocVi 
+           FROM LichGap lg
+           JOIN GiangVien gv ON lg.GiangVienID = gv.GiangVienID
+           WHERE lg.SinhVienID = :studentId AND lg.NgayGap >= CURDATE()
+           ORDER BY lg.NgayGap ASC
+Result: SUCCESS
+Query executed: SELECT lg.*, gv.HoTen AS TenGiangVien, gv.HocVi 
+           FROM LichGap lg
+           JOIN GiangVien gv ON lg.GiangVienID = gv.GiangVienID
+           WHERE lg.SinhVienID = :studentId AND lg.NgayGap < CURDATE()
+           ORDER BY lg.NgayGap DESC
+Result: SUCCESS
+Query executed: SELECT * FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc' ORDER BY NgayTao DESC LIMIT 5
+Result: SUCCESS
+Query executed: SELECT COUNT(*) as count FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc'
+Result: SUCCESS
+Query executed: SELECT sv.*, u.Username, u.Email FROM SinhVien sv 
+            JOIN Users u ON sv.UserID = u.UserID 
+            WHERE sv.SinhVienID = :id
+Result: SUCCESS
+Query executed: SELECT 
+    svgv.*, 
+    gv.HoTen AS TenGiangVien,
+    gv.HocVi,
+    gv.Email AS EmailGiangVien,
+    dt.DeTaiID, 
+    dt.TenDeTai,
+    dt.MoTa,
+    dt.TrangThai AS TrangThaiDeTai
+FROM SinhVienGiangVienHuongDan svgv
+LEFT JOIN DeTai dt ON svgv.DeTaiID = dt.DeTaiID
+LEFT JOIN GiangVien gv ON svgv.GiangVienID = gv.GiangVienID
+WHERE svgv.SinhVienID = :studentId
+Result: SUCCESS
+Query executed: SELECT * FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc' ORDER BY NgayTao DESC LIMIT 5
+Result: SUCCESS
+Query executed: SELECT COUNT(*) as count FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc'
+Result: SUCCESS
+Query executed: SELECT * FROM users WHERE Username = :username AND Status = 'active'
+Result: SUCCESS
+Query executed: UPDATE users SET LastLogin = NOW() WHERE UserID = :userId
+Result: SUCCESS
+Query executed: SELECT SinhVienID FROM sinhvien WHERE UserID = :userId
+Result: SUCCESS
+Query executed: SELECT sv.*, u.Username, u.Email FROM SinhVien sv 
+            JOIN Users u ON sv.UserID = u.UserID 
+            WHERE sv.SinhVienID = :id
+Result: SUCCESS
+Query executed: SELECT 
+    svgv.*, 
+    gv.HoTen AS TenGiangVien,
+    gv.HocVi,
+    gv.Email AS EmailGiangVien,
+    dt.DeTaiID, 
+    dt.TenDeTai,
+    dt.MoTa,
+    dt.TrangThai AS TrangThaiDeTai
+FROM SinhVienGiangVienHuongDan svgv
+LEFT JOIN DeTai dt ON svgv.DeTaiID = dt.DeTaiID
+LEFT JOIN GiangVien gv ON svgv.GiangVienID = gv.GiangVienID
+WHERE svgv.SinhVienID = :studentId
+Result: SUCCESS
+Query executed: SELECT * FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc' ORDER BY NgayTao DESC LIMIT 5
+Result: SUCCESS
+Query executed: SELECT COUNT(*) as count FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc'
+Result: SUCCESS
+Query executed: SELECT sv.*, u.Username, u.Email FROM SinhVien sv 
+            JOIN Users u ON sv.UserID = u.UserID 
+            WHERE sv.SinhVienID = :id
+Result: SUCCESS
+Query executed: SELECT lg.*, gv.HoTen AS TenGiangVien, gv.HocVi 
+           FROM LichGap lg
+           JOIN GiangVien gv ON lg.GiangVienID = gv.GiangVienID
+           WHERE lg.SinhVienID = :studentId AND lg.NgayGap >= CURDATE()
+           ORDER BY lg.NgayGap ASC
+Result: SUCCESS
+Query executed: SELECT lg.*, gv.HoTen AS TenGiangVien, gv.HocVi 
+           FROM LichGap lg
+           JOIN GiangVien gv ON lg.GiangVienID = gv.GiangVienID
+           WHERE lg.SinhVienID = :studentId AND lg.NgayGap < CURDATE()
+           ORDER BY lg.NgayGap DESC
+Result: SUCCESS
+Query executed: SELECT * FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc' ORDER BY NgayTao DESC LIMIT 5
+Result: SUCCESS
+Query executed: SELECT COUNT(*) as count FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc'
+Result: SUCCESS
+Query executed: SELECT sv.*, u.Username, u.Email FROM SinhVien sv 
+            JOIN Users u ON sv.UserID = u.UserID 
+            WHERE sv.SinhVienID = :id
+Result: SUCCESS
+Query executed: SELECT 
+    svgv.*, 
+    gv.HoTen AS TenGiangVien,
+    gv.HocVi,
+    gv.Email AS EmailGiangVien,
+    dt.DeTaiID, 
+    dt.TenDeTai,
+    dt.MoTa,
+    dt.TrangThai AS TrangThaiDeTai
+FROM SinhVienGiangVienHuongDan svgv
+LEFT JOIN DeTai dt ON svgv.DeTaiID = dt.DeTaiID
+LEFT JOIN GiangVien gv ON svgv.GiangVienID = gv.GiangVienID
+WHERE svgv.SinhVienID = :studentId
+Result: SUCCESS
+Query executed: SELECT * FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc' ORDER BY NgayTao DESC LIMIT 5
+Result: SUCCESS
+Query executed: SELECT COUNT(*) as count FROM ThongBao WHERE UserID = :userId AND TrangThai = 'chưa đọc'
+Result: SUCCESS
+Query executed: SELECT sv.*, u.Username, u.Email FROM SinhVien sv JOIN Users u ON sv.UserID = u.UserID WHERE sv.UserID = :userId
+Result: SUCCESS
+Query executed: SELECT COUNT(*) as total FROM DeTai dt 
+                JOIN SinhVienGiangVienHuongDan svgv ON dt.DeTaiID = svgv.DeTaiID 
+                WHERE svgv.SinhVienID = :studentId
+Result: SUCCESS
+Query executed: SELECT sv.*, u.Username, u.Email FROM SinhVien sv JOIN Users u ON sv.UserID = u.UserID WHERE sv.UserID = :userId
+Result: SUCCESS
+Query executed: SELECT COUNT(*) as total FROM DeTai dt 
+                JOIN SinhVienGiangVienHuongDan svgv ON dt.DeTaiID = svgv.DeTaiID 
+                WHERE svgv.SinhVienID = :studentId
+Result: SUCCESS
